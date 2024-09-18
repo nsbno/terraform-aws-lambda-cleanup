@@ -8,3 +8,8 @@ variable "cron_expression" {
   type        = string
   default     = "cron(0 0 * * ? *)"
 }
+
+variable "cluster_name" {
+  description = "The name of the ECS cluster."
+  type        = string
+}

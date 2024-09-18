@@ -172,10 +172,9 @@ data "aws_iam_policy_document" "task_execution_permissions" {
 }
 
 # SCHEDULER
-resource "aws_ecs_cluster" "ecs_cluster" {
-  name = "${local.application_name}-cluster"
+data "aws_ecs_cluster" "ecs_cluster" {
+  cluster_name = var.cluster_name
 }
-
 
 resource "aws_security_group" "allow_egress" {
   name        = "allow_egress"
@@ -205,7 +204,7 @@ resource "aws_scheduler_schedule" "schedule" {
   schedule_expression = var.cron_expression
 
   target {
-    arn      = aws_ecs_cluster.ecs_cluster.arn
+    arn      = data.aws_ecs_cluster.ecs_cluster.arn
     role_arn = aws_iam_role.scheduler_role.arn
 
     ecs_parameters {
