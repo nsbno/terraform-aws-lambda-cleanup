@@ -1,0 +1,23 @@
+= lambda-cleanup
+:!toc-title:
+:!toc-placement:
+:toc:
+
+// TODO: Write a sentence about what this module is for
+
+toc::[]
+
+== Usage
+Remember to check out the link:variables.tf[*variables*] and link:outputs.tf[*outputs*] to see all options.
+
+// TODO: Add variables to the module example!
+
+[source, hcl]
+----
+module "lambda-cleanup" {
+  source = "github.com/nsbno/terraform-aws-lambda-cleanup?ref=x.y.z"
+  
+  
+}
+----
+
