@@ -1,23 +1,29 @@
-= lambda-cleanup
+= Lambda Cleanup
 :!toc-title:
 :!toc-placement:
 :toc:
 
-// TODO: Write a sentence about what this module is for
+Using versions in Lambda results in all previous versions being kept  Lambda has a 75gb code storage limit in each
+account and region. If you have a Lambda function that is updated often, you will eventually get an error.
+
+This module makes sure that old versions are deleted, running a cron job.
 
 toc::[]
 
 == Usage
 Remember to check out the link:variables.tf[*variables*] and link:outputs.tf[*outputs*] to see all options.
 
-// TODO: Add variables to the module example!
-
 [source, hcl]
 ----
 module "lambda-cleanup" {
   source = "github.com/nsbno/terraform-aws-lambda-cleanup?ref=x.y.z"
-  
-  
 }
 ----
+
+== Relevant Repositories
+
+You can use these repos together!
+
+link:https://github.com/nsbno/terraform-aws-lambda[`nsbno/terraform-aws-lambda`]::
+Set up a AWS Lambda function with ease.
 
