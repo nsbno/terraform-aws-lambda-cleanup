@@ -20,7 +20,7 @@ resource "aws_ecs_cluster" "service_cluster" {
   name = "service-cluster"
 }
 
-module "lambda-cleanup" {
+module "lambda_cleanup" {
   source = "github.com/nsbno/terraform-aws-lambda-cleanup?ref=x.y.z"
 
   cluster_name = "service-cluster" # or reference a cluster resource
