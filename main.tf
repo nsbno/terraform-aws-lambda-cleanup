@@ -194,15 +194,15 @@ resource "aws_security_group" "allow_egress" {
     Name = "allow_egress"
   }
 }
-resource "aws_scheduler_schedule" "weekly_schedule" {
-  name        = "ecs_task_weekly_schedule"
-  description = "Scheduled rule to run the ECS task every week"
+resource "aws_scheduler_schedule" "schedule" {
+  name        = "${local.application_name}_ecs_task_schedule"
+  description = "Scheduled rule to run the ECS task"
 
   flexible_time_window {
     mode = "OFF"
   }
 
-  schedule_expression = "cron(0 0 ? * 1 *)" # Adjust the cron expression as needed
+  schedule_expression = var.cron_expression
 
   target {
     arn      = aws_ecs_cluster.ecs_cluster.arn
@@ -222,7 +222,7 @@ resource "aws_scheduler_schedule" "weekly_schedule" {
       containerOverrides = [
         {
           name = local.container_name
-          command = ["glc","clean","-r","eu-west-1","-c","3"]
+          command = ["clean","-r","eu-west-1","-c",var.n_versions_to_keep]
         }
       ]
     })
