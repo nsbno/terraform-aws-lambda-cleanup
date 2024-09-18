@@ -66,8 +66,8 @@ resource "aws_ecs_task_definition" "task" {
   task_role_arn      = aws_iam_role.task.arn
 
   requires_compatibilities = [local.launch_type]
-  cpu          = 4096
-  memory       = 16384
+  cpu          = 256
+  memory       = 512
   network_mode = "awsvpc"
 }
 
@@ -87,8 +87,8 @@ resource "aws_iam_role" "task" {
   assume_role_policy = data.aws_iam_policy_document.task_assume.json
 }
 
-resource "aws_iam_role_policy" "ecs_task_logs" {
-  name   = "${local.application_name}-log-permissions"
+resource "aws_iam_role_policy" "ecs_task_permissions" {
+  name   = "${local.application_name}-permissions"
   role   = aws_iam_role.task.id
   policy = data.aws_iam_policy_document.ecs_task_logs.json
 }
@@ -104,6 +104,20 @@ data "aws_iam_policy_document" "ecs_task_logs" {
     actions = [
       "logs:CreateLogStream",
       "logs:PutLogEvents",
+    ]
+  }
+  statement {
+    effect = "Allow"
+
+    resources = [
+      "*",
+    ]
+
+    actions = [
+      "lambda:ListFunctions",
+      "lambda:ListVersionsByFunction",
+      "lambda:ListAliases",
+      "lambda:DeleteFunction"
     ]
   }
 }
@@ -153,20 +167,6 @@ data "aws_iam_policy_document" "task_execution_permissions" {
     actions = [
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-    ]
-  }
-  statement {
-    effect = "Allow"
-
-    resources = [
-      "*",
-    ]
-
-    actions = [
-      "lambda:ListFunctions",
-      "lambda:ListVersionsByFunction",
-      "lambda:ListAliases",
-      "lambda:DeleteFunction"
     ]
   }
 }
@@ -222,7 +222,7 @@ resource "aws_scheduler_schedule" "weekly_schedule" {
       containerOverrides = [
         {
           name = local.container_name
-          command = ["glc -d clean -r eu-west-1 -c 3"]
+          command = ["glc","clean","-r","eu-west-1","-c","3"]
         }
       ]
     })
